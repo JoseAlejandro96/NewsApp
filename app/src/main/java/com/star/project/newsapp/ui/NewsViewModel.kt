@@ -5,15 +5,15 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.provider.ContactsContract
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.star.project.newsapp.NewsApplication
+import com.star.project.newsapp.R
 import com.star.project.newsapp.models.Article
 import com.star.project.newsapp.models.NewsResponse
 import com.star.project.newsapp.repository.NewsRepository
-import com.star.project.newsapp.util.Constants.Companion.COUNTRY_CODE
+import com.star.project.newsapp.util.Constants
 import com.star.project.newsapp.util.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -24,6 +24,9 @@ class NewsViewModel(
         val newsRepository: NewsRepository
     ) : AndroidViewModel(app){
 
+    var preferences = app.getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
+    var currentCountry = preferences.getString(app.getString(R.string.countryCode), "us")?: "us"
+
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
     var breakingNewsResponse: NewsResponse? = null
@@ -32,9 +35,9 @@ class NewsViewModel(
     var searchNewsPage = 1
     var searchNewsResponse: NewsResponse? = null
 
-    init {
-        getBreakingNews(COUNTRY_CODE)
-    }
+//    init {
+//        getBreakingNews(currentCountry)
+//    }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
         safeBreakingNewsCall(countryCode)
@@ -73,6 +76,7 @@ class NewsViewModel(
                     val oldArticles = searchNewsResponse?.articles
                     val newsArticles = resultResponse.articles
                     oldArticles?.addAll(newsArticles)
+                    searchNewsResponse = resultResponse
                 }
                 return Resource.Success(searchNewsResponse?:resultResponse)
             }

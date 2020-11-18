@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
-    app:startDestination="@id/breakingNewsFragment">
+    app:startDestination="@id/selectCountryFragment">
 
     <fragment
         android:id="@+id/articleFragment"
@@ -34,5 +34,15 @@
         <action
             android:id="@+id/action_searchNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectCountryFragment"
+        android:name="com.star.project.newsapp.ui.fragments.SelectCountryFragment"
+        android:label="SelectCountryFragment" >
+        <action
+            android:id="@+id/action_selectCountryFragment_to_breakingNewsFragment"
+            app:destination="@id/breakingNewsFragment"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

@@ -1,5 +1,7 @@
 package com.star.project.newsapp.ui.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,9 +16,10 @@ import com.star.project.newsapp.R
 import com.star.project.newsapp.adapters.NewsAdapter
 import com.star.project.newsapp.ui.NewsActivity
 import com.star.project.newsapp.ui.NewsViewModel
-import com.star.project.newsapp.util.Constants.Companion.COUNTRY_CODE
+import com.star.project.newsapp.util.Constants
 import com.star.project.newsapp.util.Constants.Companion.QUERY_PAGE_SIZE
 import com.star.project.newsapp.util.Resource
+import kotlinx.android.synthetic.main.activity_news.*
 import kotlinx.android.synthetic.main.fragment_breaking_news.*
 
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
@@ -28,8 +31,11 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
+        viewModel.getBreakingNews(viewModel.currentCountry)
+        (activity as NewsActivity).bottomNavigationView.visibility = View.VISIBLE
 
         newsAdapter.setOnClickListener {
             val bundle = Bundle().apply {
@@ -94,7 +100,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             val shouldPaginate = isNotLoadingAndNotAtLastPage && isAtLastItem && isNotAtBeginning
                     && isTotalMoreThanVisible && isScrolling
             if(shouldPaginate){
-                viewModel.getBreakingNews(COUNTRY_CODE)
+                viewModel.getBreakingNews(viewModel.currentCountry)
                 isScrolling = false
             }
         }
