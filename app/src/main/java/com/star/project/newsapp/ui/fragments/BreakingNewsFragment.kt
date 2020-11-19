@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_breaking_news.*
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     lateinit var viewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
+    lateinit var preferences: SharedPreferences
 
     val TAG = "BreakingNewsFragment"
 
@@ -33,6 +34,8 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
 
         viewModel = (activity as NewsActivity).viewModel
+        preferences = requireActivity().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
+        viewModel.currentCountry = preferences.getString(getString(R.string.countryCode), "us")?:"us"
         setupRecyclerView()
         viewModel.getBreakingNews(viewModel.currentCountry)
         (activity as NewsActivity).bottomNavigationView.visibility = View.VISIBLE

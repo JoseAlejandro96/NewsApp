@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_news.*
 import kotlinx.android.synthetic.main.fragment_select_country.*
 
 class SelectCountryFragment : Fragment(R.layout.fragment_select_country) {
-    val countries = listOf("Argentina", "Australia", "Austria", "Belgium", "Brazil",
+    private val countries = listOf("Argentina", "Australia", "Austria", "Belgium", "Brazil",
                                         "Bulgaria", "Canada", "China", "Colombia", "Cuba", "Czech Republic",
                                         "Egypt", "France", "Germany", "Greece", "Hong Kong", "Hungary",
                                         "India", "Indonesia", "Ireland", "Israel", "Italy", "Japan",
@@ -30,7 +30,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_country) {
                                         "Slovenia", "South Africa", "South Korea", "Sweden", "Switzerland",
                                         "Taiwan", "Thailand", "Turkey", "UAE", "Ukraine", "United Kingdom",
                                         "United States", "Venezuela")
-    val countyCodes = listOf("ar", "au", "at", "be", "br",
+    private val countyCodes = listOf("ar", "au", "at", "be", "br",
                                         "bg", "ca", "cn", "co", "cu", "cz",
                                         "eg", "fr", "de", "gr", "hk", "hu",
                                         "in", "id", "ie", "il", "it", "jp",
@@ -43,14 +43,12 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_country) {
 
     lateinit var preferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
-    lateinit var viewModel: NewsViewModel
     private var isCountryCodeExists: Boolean = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = (activity as NewsActivity).viewModel
         initPreferences()
         getMyPreferences()
 //        if(isCountryCodeExists){
@@ -95,7 +93,6 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_country) {
                 putString(getString(R.string.countryCode), code)
                 apply()
             }
-            viewModel.currentCountry = code
 
 
             (activity as NewsActivity).bottomNavigationView.visibility = View.VISIBLE
